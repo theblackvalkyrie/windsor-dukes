@@ -395,6 +395,7 @@ export default function WindsorDukes() {
   const [allScores,setAllScores]=useState([]);
   const [leaderboard,setLeaderboard]=useState([]);
   const [dashTab,setDashTab]=useState("overview");
+  const [unlockAll,setUnlockAll]=useState(false);
 
   useEffect(()=>{
     (async()=>{try{
@@ -445,7 +446,7 @@ export default function WindsorDukes() {
     }catch{}
   };
 
-  const unlocked=t=>t===1||(hist[t-1]&&hist[t-1].length>0);
+  const unlocked=t=>unlockAll||t===1||(hist[t-1]&&hist[t-1].length>0);
   const score=done?questions.filter((q,i)=>ans[i]===q.ans).length:0;
   const pct=done?Math.round(score/(questions.length||1)*100):0;
   const answered=Object.keys(ans).length;
@@ -559,6 +560,15 @@ export default function WindsorDukes() {
           <div className="flex items-center justify-between mb-3">
             <div><h1 className="text-xl font-black text-slate-800">🎓 Windsor Dukes</h1><p className="text-slate-400 text-xs">@{username}</p></div>
             <button onClick={()=>setScreen("dashboard")} className={`${tc.color} text-white p-2.5 rounded-xl`}><BarChart3 className="w-4 h-4"/></button>
+          </div>
+
+          {/* Unlock all toggle */}
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wide">Tests</p>
+            <button onClick={()=>setUnlockAll(u=>!u)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition ${unlockAll?"bg-amber-400 border-amber-400 text-white":"bg-white border-slate-200 text-slate-500 hover:border-amber-400 hover:text-amber-600"}`}>
+              {unlockAll?<><span>🔓</span> All Unlocked</>:<><span>🔒</span> Unlock All</>}
+            </button>
           </div>
 
           {/* Test tabs */}
